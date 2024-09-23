@@ -28,7 +28,25 @@ public class Course {
     @OneToMany(mappedBy = "course")
     private Set<Student> students = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "courses_instructors",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "instructor_id")
+    )
+    private Set<Instructor> instructors = new HashSet<>();
+
     public Course(String courseName) {
         this.courseName = courseName;
+    }
+
+    public void addStudent(Student student) {
+        students.add(student);
+        student.setCourse(this);
+    }
+
+    public void removeStudent(Student student) {
+        students.remove(student);
+        student.setCourse(null);
     }
 }
