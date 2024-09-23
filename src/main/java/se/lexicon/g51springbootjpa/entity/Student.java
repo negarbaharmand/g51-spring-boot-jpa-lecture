@@ -20,6 +20,7 @@ public class Student {
     @Id
     //@GeneratedValue(strategy = GenerationType.IDENTITY)
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(updatable = false)
     private String id;
 
     @Column(nullable = false, length = 100)
@@ -41,14 +42,29 @@ public class Student {
 
 
     @Setter
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER) //student.getAddress
     @JoinColumn(name = "address_id")
     private Address address;
+
+    @ManyToOne
+    @JoinColumn(name = "course_id")
+    @Setter
+    private Course course;
+
 
     public Student(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.status = true;
+        this.createDate = LocalDateTime.now();
+    }
+
+    public Student(String firstName, String lastName, String email, Address address) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.address = address;
         this.status = true;
         this.createDate = LocalDateTime.now();
     }
